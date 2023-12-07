@@ -4121,3 +4121,90 @@ INSERT INTO `system_users` (`id`, `username`, `password`, `nickname`, `remark`, 
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- wms业务
+INSERT INTO `system_menu` VALUES (12524, '仓库管理', '', 2, 100, 0, '/wms', 'clipboard', NULL, NULL, 0, b'1', b'1', b'1', '1', '2023-12-04 10:18:26', '1', '2023-12-04 10:20:31', b'0');
+INSERT INTO `system_menu` VALUES (12526, '条码管理', '', 2, 0, 12524, 'barcode', '', 'wms/barcode/index', 'Barcode', 0, b'1', b'1', b'1', '', '2023-12-04 13:03:41', '', '2023-12-04 13:09:03', b'0');
+INSERT INTO `system_menu` VALUES (12527, '条码查询', 'wms:barcode:query', 3, 1, 12526, '', '', '', NULL, 0, b'1', b'1', b'1', '', '2023-12-04 13:03:41', '', '2023-12-04 13:03:41', b'0');
+INSERT INTO `system_menu` VALUES (12528, '条码创建', 'wms:barcode:create', 3, 2, 12526, '', '', '', NULL, 0, b'1', b'1', b'1', '', '2023-12-04 13:03:41', '', '2023-12-04 13:03:41', b'0');
+INSERT INTO `system_menu` VALUES (12529, '条码更新', 'wms:barcode:update', 3, 3, 12526, '', '', '', NULL, 0, b'1', b'1', b'1', '', '2023-12-04 13:03:41', '', '2023-12-04 13:03:41', b'0');
+INSERT INTO `system_menu` VALUES (12530, '条码删除', 'wms:barcode:delete', 3, 4, 12526, '', '', '', NULL, 0, b'1', b'1', b'1', '', '2023-12-04 13:03:41', '', '2023-12-04 13:03:41', b'0');
+INSERT INTO `system_menu` VALUES (12531, '条码导出', 'wms:barcode:export', 3, 5, 12526, '', '', '', NULL, 0, b'1', b'1', b'1', '', '2023-12-04 13:03:41', '', '2023-12-04 13:03:41', b'0');
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+INSERT INTO `system_dict_data` VALUES (11455, 0, '入库', '10', 'barcode_status', 0, 'default', '', NULL, '1', '2023-12-05 09:11:17', '1', '2023-12-05 16:55:32', b'1');
+INSERT INTO `system_dict_data` VALUES (11456, 0, '出库', '20', 'barcode_status', 0, 'default', '', NULL, '1', '2023-12-05 09:11:49', '1', '2023-12-05 16:55:30', b'1');
+INSERT INTO `system_dict_data` VALUES (11457, 0, '未入库', '10', 'wms_barcode_status', 0, 'default', '', NULL, '1', '2023-12-05 16:56:49', '1', '2023-12-05 16:56:49', b'0');
+INSERT INTO `system_dict_data` VALUES (11458, 0, '在库', '20', 'wms_barcode_status', 0, 'default', '', NULL, '1', '2023-12-05 16:57:19', '1', '2023-12-05 16:57:19', b'0');
+INSERT INTO `system_dict_data` VALUES (11459, 0, '离库', '30', 'wms_barcode_status', 0, 'default', '', NULL, '1', '2023-12-05 16:57:29', '1', '2023-12-05 16:57:29', b'0');
+INSERT INTO `system_dict_data` VALUES (11460, 0, '废除', '40', 'wms_barcode_status', 0, 'default', '', NULL, '1', '2023-12-05 17:03:21', '1', '2023-12-05 17:03:21', b'0');
+INSERT INTO `system_dict_data` VALUES (11461, 0, 'WMS', 'WMS', 'wms_barcode_source', 0, 'default', '', NULL, '1', '2023-12-05 17:10:18', '1', '2023-12-05 17:10:49', b'0');
+INSERT INTO `system_dict_data` VALUES (11462, 0, 'WMS-PDA', 'WMS-PDA', 'wms_barcode_source', 0, 'default', '', NULL, '1', '2023-12-05 17:10:27', '1', '2023-12-05 17:11:01', b'0');
+INSERT INTO `system_dict_data` VALUES (11463, 0, 'MES', 'MES', 'wms_barcode_source', 0, 'default', '', NULL, '1', '2023-12-05 17:10:40', '1', '2023-12-05 17:10:40', b'0');
+INSERT INTO `system_dict_data` VALUES (11464, 0, '圆柱电池', '1', 'wms_barcode_type', 0, 'default', '', NULL, '1', '2023-12-05 17:26:58', '1', '2023-12-05 17:26:58', b'0');
+INSERT INTO `system_dict_data` VALUES (11465, 0, '软包', '2', 'wms_barcode_type', 0, 'default', '', NULL, '1', '2023-12-05 17:27:04', '1', '2023-12-05 17:27:04', b'0');
+
+
+INSERT INTO `system_dict_type` VALUES (1607, '条码状态', 'barcode_status', 0, '条码状态', '1', '2023-12-05 09:09:23', '1', '2023-12-05 16:55:40', b'1', '2023-12-05 16:55:41');
+INSERT INTO `system_dict_type` VALUES (1608, '条码状态', 'wms_barcode_status', 0, '条码状态', '1', '2023-12-05 16:56:03', '1', '2023-12-05 16:56:03', b'0', '1970-01-01 00:00:00');
+INSERT INTO `system_dict_type` VALUES (1609, '条码来源', 'wms_barcode_source', 0, NULL, '1', '2023-12-05 17:09:58', '1', '2023-12-05 17:09:58', b'0', '1970-01-01 00:00:00');
+INSERT INTO `system_dict_type` VALUES (1610, '条码类型', 'wms_barcode_type', 0, '条码类型', '1', '2023-12-05 17:26:38', '1', '2023-12-05 17:26:38', b'0', '1970-01-01 00:00:00');
+
+-- 菜单 SQL
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status, component_name
+)
+VALUES (
+           '托盘管理', '', 2, 0, 12524,
+           'tray', '', 'wms/tray/index', 0, 'Tray'
+       );
+
+-- 按钮父菜单ID
+-- 暂时只支持 MySQL。如果你是 Oracle、PostgreSQL、SQLServer 的话，需要手动修改 @parentId 的部分的代码
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '托盘查询', 'wms:tray:query', 3, 1, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '托盘创建', 'wms:tray:create', 3, 2, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '托盘更新', 'wms:tray:update', 3, 3, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '托盘删除', 'wms:tray:delete', 3, 4, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '托盘导出', 'wms:tray:export', 3, 5, @parentId,
+           '', '', '', 0
+       );
