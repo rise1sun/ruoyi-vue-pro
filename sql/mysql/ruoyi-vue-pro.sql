@@ -4208,3 +4208,60 @@ VALUES (
            '托盘导出', 'wms:tray:export', 3, 5, @parentId,
            '', '', '', 0
        );
+
+
+-- 菜单 SQL
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status, component_name
+)
+VALUES (
+           '本地消息管理', '', 2, 0, 12524,
+           'secure-invoke-record', '', 'wms/secureinvokerecord/index', 0, 'SecureInvokeRecord'
+       );
+
+-- 按钮父菜单ID
+-- 暂时只支持 MySQL。如果你是 Oracle、PostgreSQL、SQLServer 的话，需要手动修改 @parentId 的部分的代码
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '本地消息查询', 'wms:secure-invoke-record:query', 3, 1, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '本地消息创建', 'wms:secure-invoke-record:create', 3, 2, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '本地消息更新', 'wms:secure-invoke-record:update', 3, 3, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '本地消息删除', 'wms:secure-invoke-record:delete', 3, 4, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '本地消息导出', 'wms:secure-invoke-record:export', 3, 5, @parentId,
+           '', '', '', 0
+       );
