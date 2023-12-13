@@ -27,4 +27,14 @@ public interface RegionStorageMapper extends BaseMapperX<RegionStorageDO> {
         return delete(RegionStorageDO::getRegionId, regionId);
     }
 
+
+    default RegionStorageDO slectByStorage(String storage){
+        return selectOne(new LambdaQueryWrapperX<RegionStorageDO>()
+                .eq(RegionStorageDO::getCode, storage));
+    }
+
+    default void updateRegionStorageStatusByCode(RegionStorageDO regionStorageDO){
+        update(regionStorageDO,new LambdaQueryWrapperX<RegionStorageDO>()
+                .eq(RegionStorageDO::getCode,regionStorageDO.getCode()));
+    }
 }

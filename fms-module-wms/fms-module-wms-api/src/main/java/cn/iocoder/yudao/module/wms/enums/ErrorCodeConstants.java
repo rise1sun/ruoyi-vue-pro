@@ -12,7 +12,12 @@ public interface ErrorCodeConstants {
     ErrorCode SECURE_INVOKE_RECORD_NOT_EXISTS = new ErrorCode(1001003000, "安全调用记录不存在");
     ErrorCode PROCESS_FLOW_NOT_EXISTS = new ErrorCode(1001004000, "工艺流程表不存在");
     ErrorCode PROCESS_FLOW_ITEM_NOT_EXISTS = new ErrorCode(1001005000, "工艺流程表不存在");
-    ErrorCode REGION_NOT_EXISTS = new ErrorCode(1001006000, "库位管理不存在");
-    ErrorCode REGION_STORAGE_NOT_EXISTS = new ErrorCode(1001007000, "库位管理不存在");
+    ErrorCode REGION_NOT_EXISTS = new ErrorCode(1001006000, "区域不存在");
+    ErrorCode REGION_STORAGE_NOT_EXISTS = new ErrorCode(1001007000, "库位不存在");
+    ErrorCode BARCODE_MOBILE_RECORD_NOT_EXISTS = new ErrorCode(1001008000, "移动记录不存在");
+    ErrorCode STORAGE_TRAY_NOT_EXISTS = new ErrorCode(1001009000, "库位托盘绑定记录不存在");
+    ErrorCode EMPTY_TRAY_WAREHOUSING_ERROR = new ErrorCode(1001009001, "空托盘入库失败");
+
+
 
 }

@@ -52,4 +52,10 @@ public interface TrayService {
      */
     PageResult<TrayDO> getTrayPage(TrayPageReqVO pageReqVO);
 
+    /**
+     * 通过托盘号查询托盘
+     * @param trayNo
+     * @return
+     */
+    TrayDO selectByTrayNo(String trayNo);
 }

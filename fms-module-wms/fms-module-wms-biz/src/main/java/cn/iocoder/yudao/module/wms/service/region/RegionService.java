@@ -94,4 +94,18 @@ public interface RegionService {
 	 */
     RegionStorageDO getRegionStorage(Long id);
 
+    /**
+     * 根据库位编号查询库位
+     *
+     * @param storage 库位编号
+     * @return 库位
+     */
+    RegionStorageDO slectByStorage(String storage);
+
+    /**
+     * 更新库位
+     *
+     * @param regionStorageDO
+     */
+    void updateRegionStorageStatusByCode(RegionStorageDO regionStorageDO);
 }

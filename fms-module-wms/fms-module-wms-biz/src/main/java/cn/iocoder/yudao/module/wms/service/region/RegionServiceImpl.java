@@ -113,6 +113,16 @@ public class RegionServiceImpl implements RegionService {
         return regionStorageMapper.selectById(id);
     }
 
+    @Override
+    public RegionStorageDO slectByStorage(String storage) {
+        return regionStorageMapper.slectByStorage(storage);
+    }
+
+    @Override
+    public void updateRegionStorageStatusByCode(RegionStorageDO regionStorageDO) {
+        regionStorageMapper.updateRegionStorageStatusByCode(regionStorageDO);
+    }
+
     private void validateRegionStorageExists(Long id) {
         if (regionStorageMapper.selectById(id) == null) {
             throw exception(REGION_STORAGE_NOT_EXISTS);

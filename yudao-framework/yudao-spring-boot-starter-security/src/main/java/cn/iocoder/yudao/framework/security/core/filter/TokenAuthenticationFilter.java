@@ -79,7 +79,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             // 类似 WebSocket 的 /ws/* 连接地址，是不需要比对用户类型的
             if (userType != null
                     && ObjectUtil.notEqual(accessToken.getUserType(), userType)) {
-                throw new AccessDeniedException("错误的用户类型");
+                //移动端只通过B端登录,用户类型判断暂时先注释
+               // throw new AccessDeniedException("错误的用户类型");
             }
             // 构建登录用户
             return new LoginUser().setId(accessToken.getUserId()).setUserType(accessToken.getUserType())

@@ -26,4 +26,8 @@ public interface TrayMapper extends BaseMapperX<TrayDO> {
                 .orderByDesc(TrayDO::getId));
     }
 
+    default TrayDO selectOne(String trayNo){
+        return selectOne(new LambdaQueryWrapperX<TrayDO>()
+                .eq(TrayDO::getTrayNo, trayNo));
+    }
 }

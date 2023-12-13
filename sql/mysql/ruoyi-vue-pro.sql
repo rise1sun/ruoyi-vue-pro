@@ -4382,3 +4382,64 @@ VALUES (
            '库位管理导出', 'wms:area:export', 3, 5, @parentId,
            '', '', '', 0
        );
+
+
+
+
+
+
+-- 菜单 SQL
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status, component_name
+)
+VALUES (
+           '条码移动记录管理', '', 2, 0, 12524,
+           'barcode-mobile-record', '', 'wms/barcodemobilerecord/index', 0, 'BarcodeMobileRecord'
+       );
+
+-- 按钮父菜单ID
+-- 暂时只支持 MySQL。如果你是 Oracle、PostgreSQL、SQLServer 的话，需要手动修改 @parentId 的部分的代码
+SELECT @parentId := LAST_INSERT_ID();
+
+-- 按钮 SQL
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '条码移动记录查询', 'wms:barcode-mobile-record:query', 3, 1, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '条码移动记录创建', 'wms:barcode-mobile-record:create', 3, 2, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '条码移动记录更新', 'wms:barcode-mobile-record:update', 3, 3, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '条码移动记录删除', 'wms:barcode-mobile-record:delete', 3, 4, @parentId,
+           '', '', '', 0
+       );
+INSERT INTO system_menu(
+    name, permission, type, sort, parent_id,
+    path, icon, component, status
+)
+VALUES (
+           '条码移动记录导出', 'wms:barcode-mobile-record:export', 3, 5, @parentId,
+           '', '', '', 0
+       );

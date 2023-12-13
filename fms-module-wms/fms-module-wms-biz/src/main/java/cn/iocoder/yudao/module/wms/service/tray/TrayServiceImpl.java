@@ -71,4 +71,9 @@ public class TrayServiceImpl implements TrayService {
         return trayMapper.selectPage(pageReqVO);
     }
 
+    @Override
+    public TrayDO selectByTrayNo(String trayNo) {
+        return trayMapper.selectOne(trayNo);
+    }
+
 }
