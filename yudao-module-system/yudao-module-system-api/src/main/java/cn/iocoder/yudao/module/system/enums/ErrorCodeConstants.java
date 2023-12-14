@@ -171,4 +171,6 @@ public interface ErrorCodeConstants {
     // ========== 站内信发送 1-002-028-000 ==========
     ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1_002_028_000, "模板参数({})缺失");
 
+    ErrorCode ACCESS_DENIED = new ErrorCode(401, "登录失效，请重新登录");
+
 }

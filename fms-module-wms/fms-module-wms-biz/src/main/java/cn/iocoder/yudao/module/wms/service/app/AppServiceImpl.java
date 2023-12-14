@@ -1,9 +1,11 @@
 package cn.iocoder.yudao.module.wms.service.app;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
 import cn.iocoder.yudao.module.wms.common.enums.StorageEnum;
 import cn.iocoder.yudao.module.wms.common.enums.TrayEnum;
+import cn.iocoder.yudao.module.wms.common.utils.AssertUtil;
 import cn.iocoder.yudao.module.wms.controller.admin.barcodemobilerecord.vo.BarcodeMobileRecordSaveReqVO;
 import cn.iocoder.yudao.module.wms.controller.admin.storagetray.vo.StorageTraySaveReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.EmptyTrayWarehousingReqVO;
@@ -22,7 +24,8 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.wms.enums.ErrorCodeConstants.EMPTY_TRAY_WAREHOUSING_ERROR;
+import static cn.iocoder.yudao.module.system.enums.ErrorCodeConstants.MAIL_SEND_TEMPLATE_PARAM_MISS;
+import static cn.iocoder.yudao.module.wms.enums.ErrorCodeConstants.*;
 
 /**
  * @author jiangfeng
@@ -78,8 +81,14 @@ public class AppServiceImpl implements AppService {
     @NotNull
     private RegionStorageDO getRegionStorageAndCheck(String storage) {
         RegionStorageDO regionStorageDO = regionService.slectByStorage(storage);
-        Assert.notNull(regionStorageDO, "库位不存在");
-        Assert.isTrue(StorageEnum.free.getStatus().equals(regionStorageDO.getStatus()), "库位状态不是空闲");
+        AssertUtil.notNull(regionStorageDO,STORAGE_ABSENT_ERROR,storage);
+//        if(ObjectUtil.isNull(regionStorageDO)){
+//            throw exception(STORAGE_ABSENT_ERROR, storage);
+//        }
+//        if(!StorageEnum.free.getStatus().equals(regionStorageDO.getStatus())){
+//            throw exception(STORAGE_STATUS_ERROR);
+//        }
+        AssertUtil.equal(StorageEnum.free.getStatus(),regionStorageDO.getStatus(),STORAGE_STATUS_ERROR);
         return regionStorageDO;
     }
 
@@ -87,8 +96,14 @@ public class AppServiceImpl implements AppService {
     private TrayDO getTrayAndCheck(EmptyTrayWarehousingReqVO emptyTrayWarehousingReqVO) {
         String trayNo = emptyTrayWarehousingReqVO.getTrayNo();
         TrayDO tray = trayService.selectByTrayNo(trayNo);
-        Assert.notNull(tray, "托盘不存在");
-        Assert.isTrue(TrayEnum.free.getStatus().equals(tray.getStatus()), "托盘状态不是空闲");
+        AssertUtil.notNull(tray,TRAY_ABSENT_ERROR,trayNo);
+//        if(ObjectUtil.isNull(tray)){
+//            throw exception(TRAY_ABSENT_ERROR, trayNo);
+//        }
+        AssertUtil.equal(TrayEnum.free.getStatus(),tray.getStatus(),TRAY_STATUS_ERROR);
+//        if (!TrayEnum.free.getStatus().equals(tray.getStatus())){
+//            throw exception(TRAY_STATUS_ERROR);
+//        }
         return tray;
     }
 

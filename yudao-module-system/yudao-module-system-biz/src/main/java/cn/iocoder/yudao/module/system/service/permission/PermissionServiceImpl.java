@@ -2,6 +2,7 @@ package cn.iocoder.yudao.module.system.service.permission;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.iocoder.yudao.framework.common.enums.CommonStatusEnum;
@@ -33,8 +34,10 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.function.Supplier;
 
+import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.framework.common.util.collection.CollectionUtils.convertSet;
 import static cn.iocoder.yudao.framework.common.util.json.JsonUtils.toJsonString;
+import static cn.iocoder.yudao.module.system.enums.ErrorCodeConstants.ACCESS_DENIED;
 
 /**
  * 权限 Service 实现类
@@ -254,7 +257,11 @@ public class PermissionServiceImpl implements PermissionService {
     @VisibleForTesting
     List<RoleDO> getEnableUserRoleListByUserIdFromCache(Long userId) {
         // 获得用户拥有的角色编号
+        if(Objects.isNull(userId)){
+            throw exception(ACCESS_DENIED);
+        }
         Set<Long> roleIds = getSelf().getUserRoleIdListByUserIdFromCache(userId);
+
         // 获得角色数组，并移除被禁用的
         List<RoleDO> roles = roleService.getRoleListFromCache(roleIds);
         roles.removeIf(role -> !CommonStatusEnum.ENABLE.getStatus().equals(role.getStatus()));
