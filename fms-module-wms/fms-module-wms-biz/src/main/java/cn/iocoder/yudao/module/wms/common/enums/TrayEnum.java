@@ -11,9 +11,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TrayEnum {
-    free(1, "空闲"),
-    bind(2, "绑定"),
-    deprecated(3, "废弃"),;
+    FREE(1, "空闲"),
+    BIND(2, "绑定"),
+    DEPRECATED(3, "废弃"),;
 
     private final Integer status;
     private final String desc;

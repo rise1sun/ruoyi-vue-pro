@@ -1,20 +1,22 @@
 package cn.iocoder.yudao.module.wms.service.app;
 
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
 import cn.iocoder.yudao.module.wms.common.enums.StorageEnum;
 import cn.iocoder.yudao.module.wms.common.enums.TrayEnum;
 import cn.iocoder.yudao.module.wms.common.utils.AssertUtil;
-import cn.iocoder.yudao.module.wms.controller.admin.barcodemobilerecord.vo.BarcodeMobileRecordSaveReqVO;
 import cn.iocoder.yudao.module.wms.controller.admin.storagetray.vo.StorageTraySaveReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.EmptyTrayWarehousingReqVO;
 import cn.iocoder.yudao.module.wms.dal.dataobject.region.RegionStorageDO;
 import cn.iocoder.yudao.module.wms.dal.dataobject.tray.TrayDO;
+import cn.iocoder.yudao.module.wms.service.adapter.BarcodeMobileRecodeAdapter;
+import cn.iocoder.yudao.module.wms.service.adapter.RegionStorageAdapter;
+import cn.iocoder.yudao.module.wms.service.adapter.StorageTrayAdapter;
 import cn.iocoder.yudao.module.wms.service.barcodemobilerecord.BarcodeMobileRecordService;
 import cn.iocoder.yudao.module.wms.service.region.RegionService;
 import cn.iocoder.yudao.module.wms.service.storagetray.StorageTrayService;
 import cn.iocoder.yudao.module.wms.service.tray.TrayService;
+import cn.iocoder.yudao.module.wms.transaction.service.MQProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,6 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.Resource;
 
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static cn.iocoder.yudao.module.system.enums.ErrorCodeConstants.MAIL_SEND_TEMPLATE_PARAM_MISS;
 import static cn.iocoder.yudao.module.wms.enums.ErrorCodeConstants.*;
 
 /**
@@ -49,6 +50,9 @@ public class AppServiceImpl implements AppService {
     @Resource
     private BarcodeMobileRecordService barcodeMobileRecordService;
 
+    @Resource
+    private MQProducer mqProducer;
+
     @Override
     @Transactional(rollbackFor = ServiceException.class)
     public void emptyTrayWarehousing(EmptyTrayWarehousingReqVO emptyTrayWarehousingReqVO) {
@@ -59,21 +63,22 @@ public class AppServiceImpl implements AppService {
         //执行入库逻辑
         try {
             //更新库位信息
-            regionService.updateRegionStorageStatusByCode(new RegionStorageDO()
-                    .setCode(storage)
-                    .setStatus(StorageEnum.occupy.getStatus())
-            );
-
+            RegionStorageDO regionStorageUpdate = RegionStorageAdapter
+                    .buildRegionStorageDO(storage, StorageEnum.OCCUPY.getStatus());
+            regionService.updateRegionStorageStatusByCode(regionStorageUpdate);
             //托盘 库位关系绑定
-            storageTrayService.createStorageTray(new StorageTraySaveReqVO()
-                    .setTrayId(tray.getId())
-                    .setStorageId(regionStorageDO.getId()));
-
+            StorageTraySaveReqVO storageTrayUpdate = StorageTrayAdapter
+                    .buildStorageTrayDO(regionStorageDO.getId(), tray.getId());
+            storageTrayService.createStorageTray(storageTrayUpdate);
             //新增托盘移动记录
-            barcodeMobileRecordService.createBarcodeMobileRecord(new BarcodeMobileRecordSaveReqVO());
+            barcodeMobileRecordService.createBarcodeMobileRecord(BarcodeMobileRecodeAdapter
+                    .buildBarcodeMobileRecordDO(tray, regionStorageDO));
+
+            //TODO 给WCS发送调度消息
+            mqProducer.sendSecureMsg("WCS-TASK", "调度消息",
+                    tray.getTrayNo()+"-"+storage+ DateUtil.nanosToMillis(System.nanoTime()));
         } catch (Exception e) {
             log.error("doEmptyTrayWarehousing 数据库更新失败", e);
-
             throw exception(EMPTY_TRAY_WAREHOUSING_ERROR);
         }
     }
@@ -81,14 +86,8 @@ public class AppServiceImpl implements AppService {
     @NotNull
     private RegionStorageDO getRegionStorageAndCheck(String storage) {
         RegionStorageDO regionStorageDO = regionService.slectByStorage(storage);
-        AssertUtil.notNull(regionStorageDO,STORAGE_ABSENT_ERROR,storage);
-//        if(ObjectUtil.isNull(regionStorageDO)){
-//            throw exception(STORAGE_ABSENT_ERROR, storage);
-//        }
-//        if(!StorageEnum.free.getStatus().equals(regionStorageDO.getStatus())){
-//            throw exception(STORAGE_STATUS_ERROR);
-//        }
-        AssertUtil.equal(StorageEnum.free.getStatus(),regionStorageDO.getStatus(),STORAGE_STATUS_ERROR);
+        AssertUtil.notNull(regionStorageDO, STORAGE_ABSENT_ERROR, storage);
+        AssertUtil.equal(StorageEnum.FREE.getStatus(), regionStorageDO.getStatus(), STORAGE_STATUS_ERROR);
         return regionStorageDO;
     }
 
@@ -96,14 +95,8 @@ public class AppServiceImpl implements AppService {
     private TrayDO getTrayAndCheck(EmptyTrayWarehousingReqVO emptyTrayWarehousingReqVO) {
         String trayNo = emptyTrayWarehousingReqVO.getTrayNo();
         TrayDO tray = trayService.selectByTrayNo(trayNo);
-        AssertUtil.notNull(tray,TRAY_ABSENT_ERROR,trayNo);
-//        if(ObjectUtil.isNull(tray)){
-//            throw exception(TRAY_ABSENT_ERROR, trayNo);
-//        }
-        AssertUtil.equal(TrayEnum.free.getStatus(),tray.getStatus(),TRAY_STATUS_ERROR);
-//        if (!TrayEnum.free.getStatus().equals(tray.getStatus())){
-//            throw exception(TRAY_STATUS_ERROR);
-//        }
+        AssertUtil.notNull(tray, TRAY_ABSENT_ERROR, trayNo);
+        AssertUtil.equal(TrayEnum.FREE.getStatus(), tray.getStatus(), TRAY_STATUS_ERROR);
         return tray;
     }
 

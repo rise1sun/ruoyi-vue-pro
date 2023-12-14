@@ -10,9 +10,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum StorageEnum {
-    free(0, "空闲"),
-    preoccupy(1, "预占用"),
-    occupy(2, "占用"),;
+    FREE(0, "空闲"),
+    PREOCCUPY(1, "预占用"),
+    OCCUPY(2, "占用"),;
 
     private final Integer status;
     private final String desc;
