@@ -1,7 +1,11 @@
 package cn.iocoder.yudao.module.wms.service.tray;
 
+import cn.iocoder.yudao.module.system.api.notify.NotifyMessageSendApi;
+import cn.iocoder.yudao.module.system.api.notify.dto.NotifySendSingleToUserReqDTO;
+import cn.iocoder.yudao.module.wms.common.constant.MessageTemplateCode;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import javax.annotation.Resource;
@@ -34,6 +38,7 @@ import static org.mockito.Mockito.*;
  * @author 超级管理员
  */
 @Import(TrayServiceImpl.class)
+@SpringBootTest
 public class TrayServiceImplTest extends BaseDbUnitTest {
 
     @Resource
@@ -41,6 +46,9 @@ public class TrayServiceImplTest extends BaseDbUnitTest {
 
     @Resource
     private TrayMapper trayMapper;
+
+    @Resource
+    private NotifyMessageSendApi notifySendApi;
 
     @Test
     public void testCreateTray_success() {
@@ -137,6 +145,19 @@ public class TrayServiceImplTest extends BaseDbUnitTest {
        assertEquals(1, pageResult.getTotal());
        assertEquals(1, pageResult.getList().size());
        assertPojoEquals(dbTray, pageResult.getList().get(0));
+    }
+
+    @Test
+    public void testSendMessage() {
+        Long userId = 1L; // 示例中写死，你可以改成你业务中的 userId 噢
+        String templateCode = MessageTemplateCode.TASK_FAILE; // 站内信模版
+        Map<String, Object> templateParams = new HashMap<>();
+        templateParams.put("key1", "奥特曼");
+        templateParams.put("key2", "变身");
+
+        // 2. 发送站内信
+        notifySendApi.sendSingleMessageToAdmin(new NotifySendSingleToUserReqDTO()
+                .setUserId(userId).setTemplateCode(templateCode).setTemplateParams(templateParams));
     }
 
 }

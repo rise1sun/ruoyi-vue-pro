@@ -1,6 +1,9 @@
 package cn.iocoder.yudao.framework.common.exception;
 
+import cn.hutool.http.HttpStatus;
+import cn.hutool.http.HttpUtil;
 import cn.iocoder.yudao.framework.common.exception.enums.ServiceErrorCodeRange;
+import cn.iocoder.yudao.framework.common.util.http.HttpUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

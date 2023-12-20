@@ -70,5 +70,4 @@ public class BarcodeMobileRecordServiceImpl implements BarcodeMobileRecordServic
     public PageResult<BarcodeMobileRecordDO> getBarcodeMobileRecordPage(BarcodeMobileRecordPageReqVO pageReqVO) {
         return barcodeMobileRecordMapper.selectPage(pageReqVO);
     }
-
 }

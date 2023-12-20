@@ -5,20 +5,21 @@ import lombok.Getter;
 
 /**
  * @author jiangfeng
- * @date 2023/12/14
+ * @date 2023/12/20
  */
+
 @Getter
 @AllArgsConstructor
-public enum BarcodeMoveTypeEnum {
+public enum BarcodeTypeEnum {
 
+    SCAN_BARCODE(0, "扫码"),
     INBOUND(1, "入库"),
     OUTBOUND(2, "出库"),
-    INTER_WAREHOUSE_TRANSFER(3, "库间移库"),
-    GROUP_TRAY(4, "组盘"),
-    REMOVE_TRAY(5, "拆盘"),
-    EMPTY_TRAY_INBOUND(6, "空托盘入库"),
-    MANUAL_BLANKING(7,"下料");
+    IN_TRANSIT(3, "途中"),
+    ;
+
 
     private final Integer status;
     private final String desc;
 }
+

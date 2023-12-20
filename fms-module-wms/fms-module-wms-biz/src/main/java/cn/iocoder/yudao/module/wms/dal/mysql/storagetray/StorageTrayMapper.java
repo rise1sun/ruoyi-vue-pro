@@ -25,4 +25,15 @@ public interface StorageTrayMapper extends BaseMapperX<StorageTrayDO> {
                 .orderByDesc(StorageTrayDO::getId));
     }
 
+   default void deleteStorageTrayByTrayIdAndStorageId(Long trayId, Long storageId){
+        delete(new LambdaQueryWrapperX<StorageTrayDO>()
+                .eq(StorageTrayDO::getTrayId, trayId)
+                .eq(StorageTrayDO::getStorageId, storageId));
+    }
+
+    default Boolean isExistStorageTrayByTrayIdAndStorageId(Long trayId, Long storageId){
+        return selectCount(new LambdaQueryWrapperX<StorageTrayDO>()
+                .eq(StorageTrayDO::getTrayId, trayId)
+                .eq(StorageTrayDO::getStorageId, storageId)) > 0;
+    }
 }

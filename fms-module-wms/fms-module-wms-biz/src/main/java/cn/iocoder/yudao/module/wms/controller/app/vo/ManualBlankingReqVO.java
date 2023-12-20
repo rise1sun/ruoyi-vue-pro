@@ -7,11 +7,11 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author jiangfeng
- * @date 2023/12/13
+ * @date 2023/12/15
  */
-@Schema(description = "管理后台 - 空托盘入库 VO")
+@Schema(description = "管理后台 - 手动下料 VO")
 @Data
-public class EmptyTrayWarehousingReqVO {
+public class ManualBlankingReqVO {
 
     @Schema(description = "托盘号")
     @NotBlank(message = "托盘号不能为空")

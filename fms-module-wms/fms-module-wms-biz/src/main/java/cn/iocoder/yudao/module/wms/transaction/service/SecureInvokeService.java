@@ -3,6 +3,9 @@ package cn.iocoder.yudao.module.wms.transaction.service;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.iocoder.yudao.module.system.api.notify.NotifyMessageSendApi;
+import cn.iocoder.yudao.module.system.api.notify.dto.NotifySendSingleToUserReqDTO;
+import cn.iocoder.yudao.module.wms.common.constant.MessageTemplateCode;
 import cn.iocoder.yudao.module.wms.common.utils.JsonUtils;
 import cn.iocoder.yudao.module.wms.transaction.dao.SecureInvokeRecordDao;
 import cn.iocoder.yudao.module.wms.transaction.domain.dto.SecureInvokeDTO;
@@ -15,10 +18,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 

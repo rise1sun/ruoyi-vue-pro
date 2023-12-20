@@ -73,6 +73,20 @@
             <version>2.2.3</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>cn.iocoder.boot</groupId>
+            <artifactId>yudao-module-system-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.iocoder.boot</groupId>
+            <artifactId>yudao-spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--        <dependency>-->
 <!--            <groupId>org.apache.shardingsphere</groupId>-->
 <!--            <artifactId>sharding-jdbc-spring-boot-starter</artifactId>-->

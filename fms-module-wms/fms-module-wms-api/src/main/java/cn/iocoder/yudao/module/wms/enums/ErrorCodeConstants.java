@@ -23,6 +23,14 @@ public interface ErrorCodeConstants {
     ErrorCode STORAGE_ABSENT_ERROR = new ErrorCode(1001009004, "库位不存在({})");
     ErrorCode STORAGE_STATUS_ERROR = new ErrorCode(1001009005, "库位状态不为空闲,不允许入库");
 
+    ErrorCode MANUAL_BLANKING_ERROR = new ErrorCode(1001009006, "手动下料失败");
+
+
+    ErrorCode TRAY_STORAGE_NOT_MATCH_ERROR = new ErrorCode(1001009007, "当前库位没有这个托盘,无法下料！");
+    ErrorCode STORAGE_ERROR = new ErrorCode(1001009008, "库位无效({})");
+
+
+
 
 
 }

@@ -31,8 +31,8 @@ public class ThreadPoolConfig implements AsyncConfigurer{
     @Primary
     public ThreadPoolTaskExecutor wmsExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(10);
+        executor.setCorePoolSize(30);
+        executor.setMaxPoolSize(50);
         executor.setQueueCapacity(200);
         executor.setThreadNamePrefix("wms-executor-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());//满了调用线程执行，认为重要任务

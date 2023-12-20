@@ -1,11 +1,11 @@
 package cn.iocoder.yudao.module.wms.service.barcodemobilerecord;
 
-import java.util.*;
-import javax.validation.*;
-import cn.iocoder.yudao.module.wms.controller.admin.barcodemobilerecord.vo.*;
-import cn.iocoder.yudao.module.wms.dal.dataobject.barcodemobilerecord.BarcodeMobileRecordDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
+import cn.iocoder.yudao.module.wms.controller.admin.barcodemobilerecord.vo.BarcodeMobileRecordPageReqVO;
+import cn.iocoder.yudao.module.wms.controller.admin.barcodemobilerecord.vo.BarcodeMobileRecordSaveReqVO;
+import cn.iocoder.yudao.module.wms.dal.dataobject.barcodemobilerecord.BarcodeMobileRecordDO;
+
+import javax.validation.Valid;
 
 /**
  * 条码移动记录 Service 接口
@@ -51,5 +51,4 @@ public interface BarcodeMobileRecordService {
      * @return 条码移动记录分页
      */
     PageResult<BarcodeMobileRecordDO> getBarcodeMobileRecordPage(BarcodeMobileRecordPageReqVO pageReqVO);
-
 }

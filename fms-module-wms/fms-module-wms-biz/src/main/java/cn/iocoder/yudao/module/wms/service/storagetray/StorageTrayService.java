@@ -52,4 +52,18 @@ public interface StorageTrayService {
      */
     PageResult<StorageTrayDO> getStorageTrayPage(StorageTrayPageReqVO pageReqVO);
 
+    /**
+     * 根据托盘id和库位id删除
+     * @param trayId
+     * @param storageId
+     */
+    void deleteStorageTrayByTrayIdAndStorageId(Long trayId, Long storageId);
+
+    /**
+     * 根据托盘id和库位id查询
+     * @param trayId
+     * @param storageId
+     * @return
+     */
+    Boolean isExistStorageTrayByTrayIdAndStorageId(Long trayId, Long storageId);
 }

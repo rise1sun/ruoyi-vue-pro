@@ -12,12 +12,30 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class BarcodeMobileRecodeAdapter {
-    public static BarcodeMobileRecordSaveReqVO buildBarcodeMobileRecordDO(TrayDO trayDO, RegionStorageDO regionStorageDO) {
+    public static BarcodeMobileRecordSaveReqVO buildBarcodeMobileRecordDO(TrayDO tray, RegionStorageDO regionStorageDO) {
         return new BarcodeMobileRecordSaveReqVO()
-                .setTrayNo(trayDO.getTrayNo())
+                .setTrayNo(tray.getTrayNo())
                 .setRegion(regionStorageDO.getRegionId().toString())
                 .setStorage(regionStorageDO.getCode())
                 .setMoveType(String.valueOf(BarcodeMoveTypeEnum.EMPTY_TRAY_INBOUND.getStatus()))
                 .setRemark(BarcodeMoveTypeEnum.EMPTY_TRAY_INBOUND.getDesc());
+    }
+
+    public static BarcodeMobileRecordSaveReqVO buildEmptyTrayWarehousingBarcodeMobileRecordDO(TrayDO tray, RegionStorageDO regionStorageDO) {
+        return new BarcodeMobileRecordSaveReqVO()
+                .setTrayNo(tray.getTrayNo())
+                .setRegion(regionStorageDO.getRegionId().toString())
+                .setStorage(regionStorageDO.getCode())
+                .setMoveType(String.valueOf(BarcodeMoveTypeEnum.EMPTY_TRAY_INBOUND.getStatus()))
+                .setRemark(BarcodeMoveTypeEnum.EMPTY_TRAY_INBOUND.getDesc());
+    }
+
+    public static BarcodeMobileRecordSaveReqVO buildManualBlankingBarcodeMobileRecordDO(TrayDO tray, RegionStorageDO regionStorageDO) {
+        return new BarcodeMobileRecordSaveReqVO()
+                .setTrayNo(tray.getTrayNo())
+                .setRegion(regionStorageDO.getRegionId().toString())
+                .setStorage(regionStorageDO.getCode())
+                .setMoveType(String.valueOf(BarcodeMoveTypeEnum.MANUAL_BLANKING.getStatus()))
+                .setRemark(BarcodeMoveTypeEnum.MANUAL_BLANKING.getDesc());
     }
 }

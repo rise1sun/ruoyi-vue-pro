@@ -32,8 +32,8 @@ public class BarcodeSaveReqVO {
     @Schema(description = "托盘号")
     private String tray;
 
-    @Schema(description = "条码状态（1 在库 2 离库 3途中）", requiredMode = Schema.RequiredMode.REQUIRED, example = "2")
-    @NotNull(message = "条码状态（1 在库 2 离库 3途中）不能为空")
+    @Schema(description = "条码状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "2")
+    @NotNull(message = "条码状态不能为空")
     private Integer barcodeStatus;
 
     @Schema(description = "工艺流程id", example = "13927")
