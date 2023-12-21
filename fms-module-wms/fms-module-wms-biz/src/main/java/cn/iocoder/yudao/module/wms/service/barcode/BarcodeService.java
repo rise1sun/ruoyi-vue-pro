@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.wms.service.barcode;
 import java.util.*;
 import javax.validation.*;
 import cn.iocoder.yudao.module.wms.controller.admin.barcode.vo.*;
+import cn.iocoder.yudao.module.wms.controller.app.vo.BarcodeVO;
 import cn.iocoder.yudao.module.wms.dal.dataobject.barcode.BarcodeDO;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.pojo.PageParam;
@@ -52,4 +53,16 @@ public interface BarcodeService {
      */
     PageResult<BarcodeDO> getBarcodePage(BarcodePageReqVO pageReqVO);
 
+    /**
+     * 删除条码
+     *
+     * @param barcode
+     */
+    Integer deleteBarcodeByBarcode(String barcode);
+
+    /**
+     * 批量更新条码
+     * @param barcodes
+     */
+    void batchUpdateBarcodes(List<String> barcodes,Map<String,Object> params);
 }

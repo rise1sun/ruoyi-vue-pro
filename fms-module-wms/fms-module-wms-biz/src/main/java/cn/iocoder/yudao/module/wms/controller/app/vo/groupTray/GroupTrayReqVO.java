@@ -3,7 +3,9 @@ package cn.iocoder.yudao.module.wms.controller.app.vo.groupTray;
 import cn.iocoder.yudao.module.wms.controller.app.vo.BarcodeVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -15,14 +17,15 @@ import java.util.List;
 @Data
 public class GroupTrayReqVO {
 
-        @NotNull
+        @NotBlank
         @Schema(description = "托盘号")
         private String tray;
 
+        @NotBlank
         @Schema(description = "当前库位")
         private String storage;
 
-        @NotNull
+        @NotBlank
         @Schema(description = "目标库位")
         private String targetStorage;
 

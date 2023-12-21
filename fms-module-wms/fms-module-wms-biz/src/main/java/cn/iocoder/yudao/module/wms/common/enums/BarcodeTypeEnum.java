@@ -12,10 +12,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum BarcodeTypeEnum {
 
-    SCAN_BARCODE(0, "扫码"),
-    INBOUND(1, "入库"),
-    OUTBOUND(2, "出库"),
-    IN_TRANSIT(3, "途中"),
+    UN_INBOUND(10, "未入库"),
+    INBOUND(20, "入库"),
+    OUTBOUND(30, "出库"),
+    INVALID(40, "无效"),
     ;
 
 

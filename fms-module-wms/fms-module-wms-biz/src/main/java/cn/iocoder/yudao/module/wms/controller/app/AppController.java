@@ -3,6 +3,7 @@ package cn.iocoder.yudao.module.wms.controller.app;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.module.wms.common.annotation.RedissonLock;
 import cn.iocoder.yudao.module.wms.controller.app.vo.CreateBarcodeReqVO;
+import cn.iocoder.yudao.module.wms.controller.app.vo.DeleteBarcodeReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.EmptyTrayWarehousingReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.ManualBlankingReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.groupTray.*;
@@ -55,9 +56,9 @@ public class AppController {
     @PostMapping("/groupTray")
     @Operation(summary = "组盘")
     @PreAuthorize("@ss.hasPermission('wms:app:groupTray')")
-    @RedissonLock(prefixKey = "groupTray", key = "#manualBlankingReqVO.trayNo")
-    public CommonResult<Boolean> groupTray(@Valid @RequestBody ManualBlankingReqVO manualBlankingReqVO) {
-        appService.manualBlanking(manualBlankingReqVO);
+    @RedissonLock(prefixKey = "groupTray", key = "#groupTrayReqVO.tray")
+    public CommonResult<Boolean> groupTray(@Valid @RequestBody GroupTrayReqVO groupTrayReqVO) {
+        appService.groupTray(groupTrayReqVO);
         return success(true);
     }
 
@@ -87,4 +88,12 @@ public class AppController {
     public CommonResult<Long> createBarcode(@Valid @RequestBody CreateBarcodeReqVO createBarcodeReqVO) {
         return success(appService.createBarcode(createBarcodeReqVO));
     }
+
+
+    @PostMapping("/deleteBarcode")
+    @Operation(summary = "删除条码")
+    public CommonResult<Integer> deleteBarcode(@Valid @RequestBody DeleteBarcodeReqVO deleteBarcodeReqVO) {
+        return success(appService.deleteBarcode(deleteBarcodeReqVO));
+    }
+
 }

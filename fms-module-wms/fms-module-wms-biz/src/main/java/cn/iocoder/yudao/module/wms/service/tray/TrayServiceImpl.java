@@ -76,4 +76,9 @@ public class TrayServiceImpl implements TrayService {
         return trayMapper.selectOne(trayNo);
     }
 
+    @Override
+    public void updateTrayStatusByTrayNo(String tray, Integer status) {
+        trayMapper.updateTrayStatusByTrayNo(tray,status);
+    }
+
 }

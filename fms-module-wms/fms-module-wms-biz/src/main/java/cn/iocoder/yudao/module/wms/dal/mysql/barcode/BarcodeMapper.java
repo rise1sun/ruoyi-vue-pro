@@ -5,7 +5,11 @@ import java.util.*;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
+import cn.iocoder.yudao.module.wms.common.function.BFunction;
+import cn.iocoder.yudao.module.wms.common.utils.BarcodeDOUtils;
 import cn.iocoder.yudao.module.wms.dal.dataobject.barcode.BarcodeDO;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import org.apache.ibatis.annotations.Mapper;
 import cn.iocoder.yudao.module.wms.controller.admin.barcode.vo.*;
 
@@ -38,6 +42,13 @@ public interface BarcodeMapper extends BaseMapperX<BarcodeDO> {
                 .betweenIfPresent(BarcodeDO::getCreateTime, reqVO.getCreateTime())
                 .eqIfPresent(BarcodeDO::getStorage, reqVO.getStorage())
                 .orderByDesc(BarcodeDO::getId));
+    }
+
+    default void batchUpdateBarcode(List<String> barcodes, Map<BFunction<BarcodeDO, ?>, Object> params){
+        LambdaUpdateWrapper<BarcodeDO> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.in(BarcodeDO::getBarcode, barcodes);
+
+        update(updateWrapper);
     }
 
 }

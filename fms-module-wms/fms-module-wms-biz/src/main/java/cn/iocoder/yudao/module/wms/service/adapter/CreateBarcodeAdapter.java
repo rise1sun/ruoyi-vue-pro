@@ -1,5 +1,6 @@
 package cn.iocoder.yudao.module.wms.service.adapter;
 
+import cn.iocoder.yudao.module.wms.common.enums.BarcodeSourceEnum;
 import cn.iocoder.yudao.module.wms.common.enums.BarcodeTypeEnum;
 import cn.iocoder.yudao.module.wms.controller.admin.barcode.vo.BarcodeSaveReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.CreateBarcodeReqVO;
@@ -12,7 +13,8 @@ public class CreateBarcodeAdapter {
     public static BarcodeSaveReqVO buildBarcodeSaveReqVO(CreateBarcodeReqVO createBarcodeReqVO) {
         return new BarcodeSaveReqVO()
                 .setBarcode(createBarcodeReqVO.getBarcode())
+                .setDataSource(String.valueOf(BarcodeSourceEnum.WMS_PDA.getType()))
                 .setChannelIndex(createBarcodeReqVO.getChannel())
-                .setBarcodeStatus(BarcodeTypeEnum.SCAN_BARCODE.getStatus());
+                .setBarcodeStatus(BarcodeTypeEnum.UN_INBOUND.getStatus());
     }
 }

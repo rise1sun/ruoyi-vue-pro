@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.wms.service.app;
 
 import cn.iocoder.yudao.module.wms.controller.app.vo.CreateBarcodeReqVO;
+import cn.iocoder.yudao.module.wms.controller.app.vo.DeleteBarcodeReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.EmptyTrayWarehousingReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.ManualBlankingReqVO;
 import cn.iocoder.yudao.module.wms.controller.app.vo.groupTray.*;
@@ -48,5 +49,26 @@ public interface AppService {
      */
     CheckTrayDataRespVO checkTrayData(CheckTrayDataReqVO checkTrayDataReqVO);
 
+    /**
+     * 创建条码
+     *
+     * @param createBarcodeReqVO
+     * @return
+     */
     Long createBarcode(CreateBarcodeReqVO createBarcodeReqVO);
+
+    /**
+     * 删除条码
+     *
+     * @param deleteBarcodeReqVO
+     * @return
+     */
+    Integer deleteBarcode(DeleteBarcodeReqVO deleteBarcodeReqVO);
+
+    /**
+     * 组盘
+     *
+     * @param groupTrayReqVO
+     */
+    void groupTray(GroupTrayReqVO groupTrayReqVO);
 }

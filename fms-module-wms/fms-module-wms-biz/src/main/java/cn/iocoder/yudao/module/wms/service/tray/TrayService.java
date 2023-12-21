@@ -58,4 +58,11 @@ public interface TrayService {
      * @return
      */
     TrayDO selectByTrayNo(String trayNo);
+
+    /**
+     * 通过托盘号更新托盘状态
+     * @param tray
+     * @param status
+     */
+    void updateTrayStatusByTrayNo(String tray, Integer status);
 }

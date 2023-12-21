@@ -9,6 +9,8 @@ import cn.iocoder.yudao.framework.common.exception.ErrorCode;
 public interface ErrorCodeConstants {
     ErrorCode ACCESS_DENIED = new ErrorCode(401, "登录失效，请重新登录");
     ErrorCode BARCODE_NOT_EXISTS = new ErrorCode(1001001000, "条码不存在");
+    ErrorCode BARCODE_MAP_KEY_TO_SFUNCTION_ERROR = new ErrorCode(1001001001, "mapKeyToSFunction key({}) 不存在");
+
     ErrorCode TRAY_NOT_EXISTS = new ErrorCode(1001002000, "托盘不存在");
     ErrorCode SECURE_INVOKE_RECORD_NOT_EXISTS = new ErrorCode(1001003000, "安全调用记录不存在");
     ErrorCode PROCESS_FLOW_NOT_EXISTS = new ErrorCode(1001004000, "工艺流程表不存在");

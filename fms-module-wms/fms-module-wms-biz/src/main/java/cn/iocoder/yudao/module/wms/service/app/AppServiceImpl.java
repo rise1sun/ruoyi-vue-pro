@@ -2,14 +2,18 @@ package cn.iocoder.yudao.module.wms.service.app;
 
 import cn.hutool.core.date.DateUtil;
 import cn.iocoder.yudao.framework.common.exception.ServiceException;
+import cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils;
+import cn.iocoder.yudao.module.wms.common.constant.MapKey;
 import cn.iocoder.yudao.module.wms.common.enums.StorageEnum;
 import cn.iocoder.yudao.module.wms.common.enums.TrayEnum;
+import cn.iocoder.yudao.module.wms.common.event.InboundEvent;
+import cn.iocoder.yudao.module.wms.common.handler.RequestHandler;
 import cn.iocoder.yudao.module.wms.common.utils.AssertUtil;
 import cn.iocoder.yudao.module.wms.controller.admin.storagetray.vo.StorageTraySaveReqVO;
-import cn.iocoder.yudao.module.wms.controller.app.vo.CreateBarcodeReqVO;
-import cn.iocoder.yudao.module.wms.controller.app.vo.EmptyTrayWarehousingReqVO;
-import cn.iocoder.yudao.module.wms.controller.app.vo.ManualBlankingReqVO;
+import cn.iocoder.yudao.module.wms.controller.admin.tray.vo.TraySaveReqVO;
+import cn.iocoder.yudao.module.wms.controller.app.vo.*;
 import cn.iocoder.yudao.module.wms.controller.app.vo.groupTray.*;
+import cn.iocoder.yudao.module.wms.dal.dataobject.barcode.BarcodeDO;
 import cn.iocoder.yudao.module.wms.dal.dataobject.region.RegionStorageDO;
 import cn.iocoder.yudao.module.wms.dal.dataobject.tray.TrayDO;
 import cn.iocoder.yudao.module.wms.service.adapter.*;
@@ -21,12 +25,20 @@ import cn.iocoder.yudao.module.wms.service.tray.TrayService;
 import cn.iocoder.yudao.module.wms.transaction.service.MQProducer;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.annotation.Resource;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static cn.iocoder.yudao.framework.common.exception.enums.GlobalErrorCodeConstants.UNAUTHORIZED;
 import static cn.iocoder.yudao.framework.common.exception.util.ServiceExceptionUtil.exception;
 import static cn.iocoder.yudao.module.wms.enums.ErrorCodeConstants.*;
 
@@ -57,6 +69,9 @@ public class AppServiceImpl implements AppService {
 
     @Resource
     private BarcodeService barcodeService ;
+
+    @Resource
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional(rollbackFor = ServiceException.class)
@@ -144,7 +159,39 @@ public class AppServiceImpl implements AppService {
 
     @Override
     public Long createBarcode(CreateBarcodeReqVO createBarcodeReqVO) {
-        return barcodeService.createBarcode(CreateBarcodeAdapter.buildBarcodeSaveReqVO(createBarcodeReqVO));
+        if(SecurityFrameworkUtils.getLoginUser() == null){
+             throw exception(UNAUTHORIZED);
+        }
+        Long uid = SecurityFrameworkUtils.getLoginUser().getId();
+        RequestHandler.set(uid);
+        Long barcodeId = barcodeService.createBarcode(CreateBarcodeAdapter.buildBarcodeSaveReqVO(createBarcodeReqVO));
+        return barcodeId;
+    }
+
+    @Override
+    public Integer deleteBarcode(DeleteBarcodeReqVO deleteBarcodeReqVO) {
+        return barcodeService.deleteBarcodeByBarcode(deleteBarcodeReqVO.getBarcode());
+    }
+
+    @Override
+    @Transactional(rollbackFor = ServiceException.class)
+    public void groupTray(GroupTrayReqVO groupTrayReqVO) {
+        //托盘状态更新
+        trayService.updateTrayStatusByTrayNo(groupTrayReqVO.getTray(), TrayEnum.BIND.getStatus());
+        List<String> barcodeLists = groupTrayReqVO.getBarcodes().stream().map(BarcodeVO::getBatteriesBarcode)
+                .collect(Collectors.toList());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put(MapKey.TRAY,groupTrayReqVO.getTray());
+        barcodeService.batchUpdateBarcodes(barcodeLists,map);
+
+        applicationEventPublisher.publishEvent(new InboundEvent(InboundEvent.class,barcodeLists,map));
+        //事件触发入库
+
+        //启动工艺流程
+        //1 初始化条码工艺流程
+        //2 缓存托盘的工艺流程（如果条码工艺变了 在产线内的托盘 还是走缓存的工艺 正常结束才会清除 如果是NG了不会清这个缓存 如果重测 默认会）
+        //MQ发送消息
+
     }
 
     private TrayDO getTray(String trayNo) {
